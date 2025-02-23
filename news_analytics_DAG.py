@@ -13,8 +13,6 @@ config = configparser.ConfigParser()
 config.read("/home/ed/.postgres/credentials")
 pg_password = config["default"]["eddy_password"]
 
-def mock_upload_to_s3(**context):
-    return "mock_file.csv", "2025-02-17"
 
 with DAG(
     dag_id="news_analytics_etl",
@@ -25,15 +23,10 @@ with DAG(
     render_template_as_native_obj=True
 ) as dag:
     
-    # upload_to_s3_task = PythonOperator(
-    #   dag=dag,
-    #   task_id="upload_to_s3",
-    #   python_callable=upload_to_s3  
-    # )
     upload_to_s3_task = PythonOperator(
-    dag=dag,
-    task_id="upload_to_s3",
-    python_callable=mock_upload_to_s3
+      dag=dag,
+      task_id="upload_to_s3",
+      python_callable=upload_to_s3  
     )
 
     truncate_staging_task = SQLExecuteQueryOperator(
