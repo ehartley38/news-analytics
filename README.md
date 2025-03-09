@@ -6,6 +6,7 @@ Check out [this](https://medium.com/@ehartley38/learning-data-engineering-buildi
 - Apache Airflow
 - Postgres
 - Apache Superset
+- AWS S3
 
 ### Data Source
 [NewsAPI](https://newsapi.org/)
