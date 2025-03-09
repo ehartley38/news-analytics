@@ -3,12 +3,19 @@ from datetime import datetime, timedelta
 import pandas as pd
 import boto3
 import os
+import configparser
+
 
 SOURCE_BATCH_SIZE = 20
 S3_BUCKET = 'news-analytics-ed'
 
 def upload_to_s3():
-    newsapi = NewsApiClient(api_key='930d0e46b185481c83c1eff5e6a07065')
+    config = configparser.ConfigParser()
+    config.read("/home/ed/.credentials/credentials")
+    news_api_key = config["news_analytics"]["news_api_client"]
+
+
+    newsapi = NewsApiClient(api_key=news_api_key)
 
 
     # Get Sources

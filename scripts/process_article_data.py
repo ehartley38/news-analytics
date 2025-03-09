@@ -32,7 +32,7 @@ def process_article_data(file_name, file_date):
         .config("spark.jars", "/usr/share/java/postgresql-42.7.5.jar")\
         .getOrCreate()
 
-    s3_path = "s3a://news-analytics-ed/articles-2025-02-07T17-37-56"
+    s3_path = f"s3a://news-analytics-ed/articles-{file_date}"
     df = spark.read.parquet(s3_path, inferSchema=True)
     df = df.select("content")
 
@@ -79,11 +79,10 @@ def process_article_data(file_name, file_date):
 
     entity_counts_df = entity_counts_df.withColumnRenamed("lemmatized_text", "name")
 
-    # file_date = datetime.strptime(file_date, "%Y-%m-%d").date()
 
     entity_counts_df = entity_counts_df.withColumn(
     "date", 
-    to_date(lit(file_date), "yyyy-MM-dd")  # Ensure file_date is added as a literal value
+    to_date(lit(file_date), "yyyy-MM-dd")
     )
     
     insert_to_postgres(entity_counts_df, config)
